@@ -7,7 +7,7 @@ Pixel RPG characters created by Sean Browning.
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using System.IO;
 
 #region Assignment Instructions
 
@@ -72,18 +72,42 @@ public partial class PartyCharacter
 
 static public class AssignmentPart1
 {
-
+  
     static public void SavePartyButtonPressed()
     {
+
+        StreamWriter sw = new StreamWriter(Application.dataPath + Path.DirectorySeparatorChar + "SaveFileClass01.txt");
         foreach (PartyCharacter pc in GameContent.partyCharacters)
         {
-            Debug.Log("PC class id == " + pc.classID);
+            //Debug.Log("PC class id == " + pc.classID);
+            sw.WriteLine(pc.classID + "," + pc.health + "," + pc.mana + "," + pc.strength + "," + pc.agility + "," + pc.wisdom);
         }
+
+        sw.Close();
     }
 
     static public void LoadPartyButtonPressed()
     {
 
+        GameContent.partyCharacters.Clear();
+
+        if(File.Exists(Application.dataPath + Path.DirectorySeparatorChar + "SaveFileClass01.txt"))
+        {
+            string line = "";
+
+            StreamReader sr = new StreamReader(Application.dataPath + Path.DirectorySeparatorChar + "SaveFileClass01.txt");
+            
+            while((line = sr.ReadLine()) != null)
+            {
+                string[] savedLine = line.Split(',');
+
+                PartyCharacter pc = new PartyCharacter(int.Parse(savedLine[0]), int.Parse(savedLine[1]), int.Parse(savedLine[2]), int.Parse(savedLine[3]), int.Parse(savedLine[4]), int.Parse(savedLine[5]));
+
+                GameContent.partyCharacters.AddLast(pc);
+            }
+            
+          
+        }
         //GameContent.partyCharacters.Clear();
 
         GameContent.RefreshUI();
