@@ -81,8 +81,17 @@ static public class AssignmentPart1
         {
             //Debug.Log("PC class id == " + pc.classID);
             sw.WriteLine(pc.classID + "," + pc.health + "," + pc.mana + "," + pc.strength + "," + pc.agility + "," + pc.wisdom);
+
+            foreach (int e in pc.equipment)
+            {
+                //Debug.Log("EQUIPAMENT = " + e);
+                sw.WriteLine(e);
+            }
+
+            sw.WriteLine("");
         }
 
+        
         sw.Close();
     }
 
@@ -102,6 +111,11 @@ static public class AssignmentPart1
                 string[] savedLine = line.Split(',');
 
                 PartyCharacter pc = new PartyCharacter(int.Parse(savedLine[0]), int.Parse(savedLine[1]), int.Parse(savedLine[2]), int.Parse(savedLine[3]), int.Parse(savedLine[4]), int.Parse(savedLine[5]));
+
+                while((line = sr.ReadLine()) != "")
+                {
+                    pc.equipment.AddLast(int.Parse(line));
+                }
 
                 GameContent.partyCharacters.AddLast(pc);
             }
